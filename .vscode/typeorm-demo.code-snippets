@@ -1,0 +1,93 @@
+{
+	// Place your materials-advisor-api workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"Normal Column Definition": {
+		"scope": "typescript",
+		"prefix": "col",
+		"body": [
+			"@Column() $0"
+		],
+		"description": "Column Definition"
+	},
+	"Integer Column Definition": {
+		"scope": "typescript",
+		"prefix": "icol",
+		"body": [
+			"@Column(\"int\") $0"
+		],
+		"description": "Integer Column Definition"
+	},
+	"Primary Generated Column Definition": {
+		"scope": "typescript",
+		"prefix": "pgcol",
+		"body": [
+			"@PrimaryGeneratedColumn() $0"
+		],
+		"description": "Primary Generated Column Definition"
+	},
+	"Decimal Column Definition": {
+		"scope": "typescript",
+		"prefix": "dcol",
+		"body": [
+			"@Column(\"decimal\") $0"
+		],
+		"description": "Decimal Column Definition"
+	},
+	"DateTime2 Column Definition": {
+		"scope": "typescript",
+		"prefix": "dtcol",
+		"body": [
+			"@Column(\"datetime2\") $0"
+		],
+		"description": "DateTime2 Column Definition"
+	},
+	"Type ORM Entity": {
+		"scope": "typescript",
+		"prefix": "entity",
+		"body": [
+			"import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';",
+			"",
+			"@Entity()",
+			"export class ${1:className} {",
+			"    @PrimaryGeneratedColumn() id: number;",
+			"    $0",
+			"}"
+		]
+	},
+	"Type ORM Type Validator": {
+		"scope": "typescript",
+		"prefix": "tval",
+		"body": [
+			"if (typeof updater.${1:property} !== 'undefined') {",
+			"    if (typeof updater.${1:property} !== 'string') {",
+			"        ret = false;",
+			"    }",
+			"}$0"
+		]
+	},
+	"Type ORM Type Validator (number)": {
+		"scope": "typescript",
+		"prefix": "tvaln",
+		"body": [
+			"if (typeof updater.${1:property} !== 'undefined') {",
+			"    if (typeof updater.${1:property} !== 'number') {",
+			"        ret = false;",
+			"    }",
+			"}$0"
+		]
+	}
+}

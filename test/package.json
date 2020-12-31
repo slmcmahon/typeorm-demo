@@ -1,0 +1,17 @@
+{
+  "name": "typeormdemo-tests",
+  "version": "1.0.0",
+  "description": "test project for Type ORM Demo",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "cd .. && npm run build",
+    "test": "mocha ./index"
+  },
+  "keywords": [],
+  "author": "Stephen L. McMahon",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.1.3"
+  }
+}
