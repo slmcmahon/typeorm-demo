@@ -3,6 +3,7 @@ const {
     connect,
     connected,
     getCustomerRepository,
+    getInvoiceRepository,
     Customer,
     Invoice,
     InvoiceItem
@@ -29,15 +30,6 @@ describe('Initialize Contact Manager', () => {
     });
 });
 
-let c1 = {
-    lastName: "Person",
-    firstName: "Jone"
-};
-let c2 = {
-    lastName: "Person",
-    firstName: "Jane"
-};
-
 let cust1 = {
     name: "Big Company",
     street: "1 Wall Street",
@@ -57,6 +49,35 @@ let cust2 = {
     phone: "BR549",
     contactName: "Billy Ray Jackson"
 };
+
+let inv1 = {
+    invoicedOn: '2021-01-01',
+    customerInvNumber: 'DZ-015',
+    due: '2021-02-01',
+    total: 100,
+    balance: 100
+};
+
+let inv2 = {
+    invoicedOn: '2021-01-01',
+    customerInvNumber: '27B/6',
+    due: '2021-02-01',
+    total: 100,
+    balance: 100
+};
+
+describe('Add Invoice to the database', () => {
+    let invoiceId1;
+    let invoiceId2;
+
+    it('should add two invoices', async() => {
+        invoiceId1 = await getInvoiceRepository().createAndSave(inv1);
+        let invoice1 = await getInvoiceRepository().findOneInvoice(invoiceId1);
+
+        assert.exists(invoice1);
+        assert.isObject(invoice1);
+    });
+});
 
 describe('Add customer to database', () => {
     let customerId1;
@@ -159,5 +180,32 @@ describe('Delete customer', () => {
         } catch (e) {
             assert.equal(`No Customer was found for id: ${cust2.id}.`, e.message);
         }
+    });
+});
+
+describe('Create Customer with Invoices', () => {
+    it('should create a new customer with two invoices', async () => {
+        let customerId = await getCustomerRepository().createAndSave(cust1);
+        let customer = await getCustomerRepository().findOneCustomer(customerId);
+
+        let invoiceId1 = await getInvoiceRepository().createAndSave(inv1, customer);
+        let invoiceId2 = await getInvoiceRepository().createAndSave(inv2, customer);
+
+        let invoice1 = await getInvoiceRepository().findOneInvoice(invoiceId1);
+        assert.exists(invoice1);
+        assert.isObject(invoice1);
+        
+        assert.exists(invoice1.customer);
+        assert.isObject(invoice1.customer);
+        assert.equal(invoice1.customer.name, cust1.name);
+
+        let invoice2 = await getInvoiceRepository().findOneInvoice(invoiceId2);
+
+        assert.exists(invoice2);
+        assert.isObject(invoice2);
+
+        assert.exists(invoice2.customer);
+        assert.isObject(invoice2.customer);
+        assert.equal(invoice2.customer.name, cust1.name);
     });
 });

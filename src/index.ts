@@ -7,6 +7,8 @@ import { InvoiceItem } from './entity/InvoiceItem'
 export { InvoiceItem } from './entity/InvoiceItem'
 import { CustomerRepository } from './CustomerRepository';
 export { CustomerRepository } from './CustomerRepository';
+import { InvoiceRepository } from './InvoiceRepository';
+export { InvoiceRepository } from './InvoiceRepository';
 import { createConnection, Connection } from 'typeorm';
 
 let _connection: Connection;
@@ -32,5 +34,10 @@ export function connected() {
 
 export function getCustomerRepository(): CustomerRepository {
     let repo = _connection.getCustomRepository(CustomerRepository);
+    return repo;
+}
+
+export function getInvoiceRepository(): InvoiceRepository {
+    let repo = _connection.getCustomRepository(InvoiceRepository);
     return repo;
 }

@@ -1,28 +1,31 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Invoice } from './entity/Invoice';
+import { Customer } from './entity/Customer';
 
 @EntityRepository(Invoice)
 export class InvoiceRepository extends Repository<Invoice> {
 
-    async createAndSave(invoice: Invoice): Promise<number> {
+    async createAndSave(invoice: Invoice, customer: Customer): Promise<number> {
         let inv = new Invoice();
         inv.invoicedOn = invoice.invoicedOn;
         inv.due = invoice.due;
         inv.total = invoice.total;
         inv.balance = invoice.balance;
+        inv.customerInvNumber = invoice.customerInvNumber;
+        inv.customer = customer;
 
-        await this.createAndSave(inv);
+        await this.save(inv);
         return inv.id;
     }
 
     async allInvoices(): Promise<Invoice[]> {
-        let invoices = await this.find();
+        let invoices = await this.find({ relations: ["customer", "items"] });
         return invoices;
     }
 
     async findOneInvoice(id: number): Promise<Invoice> {
-        let invoice = await this.findOne({ where: { id: id } });
-        if (!InvoiceRepository.isInvoiceUpdater(invoice)) {
+        let invoice = await this.findOne({ where: { id: id }, relations: ["customer", "items"] });
+        if (!InvoiceRepository.isInvoice(invoice)) {
             throw new Error(`No Invoice was found for id: ${id}.`);
         }
         return invoice;
@@ -47,8 +50,9 @@ export class InvoiceRepository extends Repository<Invoice> {
 
     static isInvoice(invoice: any): invoice is Invoice {
         return typeof invoice === 'object'
-            && typeof invoice.invoicedOn === 'string'
-            && typeof invoice.due === 'string'
+            && typeof invoice.customerInvNumber === 'string'
+            && typeof invoice.invoicedOn === 'object'
+            && typeof invoice.due === 'object'
             && typeof invoice.total === 'number'
             && typeof invoice.balance === 'number';
     }
@@ -58,6 +62,12 @@ export class InvoiceRepository extends Repository<Invoice> {
 
         if (typeof updater !== 'object') {
             throw new Error('isInvoiceUpdater must receive an object');
+        }
+
+        if (typeof updater.customerInNumber !== 'undefined') {
+            if (typeof updater.customerInNumber !== 'string') {
+                ret = false;
+            }
         }
 
         if (typeof updater.invoicedOn !== 'undefined') {

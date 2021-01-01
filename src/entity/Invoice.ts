@@ -5,8 +5,9 @@ import { InvoiceItem } from './InvoiceItem';
 @Entity()
 export class Invoice {
     @PrimaryGeneratedColumn() id: number;
-    @Column("datetime2") invoicedOn: string;
-    @Column("datetime2") due: string;
+    @Column() customerInvNumber: string;
+    @Column("datetime2") invoicedOn: Date;
+    @Column("datetime2") due: Date;
     @Column("decimal") total: number;
     @Column("decimal") balance: number;
     @ManyToOne(() => Customer, customer => customer.invoices)
