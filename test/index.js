@@ -37,7 +37,7 @@ let cust1 = {
     state: "NY",
     postalCode: "10004",
     phone: "917 555 5555",
-    contactName: "Ezra Goldstein"
+    contactName: "John Q. Public"
 };
 
 let cust2 = {
