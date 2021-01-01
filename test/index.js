@@ -2,9 +2,10 @@ const assert = require('chai').assert;
 const {
     connect,
     connected,
-    getContactRepository,
-    Contact,
-    Address
+    getCustomerRepository,
+    Customer,
+    Invoice,
+    InvoiceItem
 } = require('../dist/index');
 
 describe('Initialize Contact Manager', () => {
@@ -16,14 +17,14 @@ describe('Initialize Contact Manager', () => {
                 password: "Qcijb-fe4k-vD6Bo9deYOw",
                 synchronize: true,
                 dropSchema: true,
-                entities: [Contact, Address]
+                entities: [Customer, Invoice, InvoiceItem]
             });
         } catch (e) {
-            console.error(`Initialize failed wiht ${e}`);
+            console.error(`Initialize failed with ${e}`);
             throw e;
         }
     });
-    it('should successfully initialize the Contact Manager', async () => {
+    it('should successfully initialize the Customer Manager', async () => {
         assert.isTrue(connected());
     });
 });
@@ -35,80 +36,128 @@ let c1 = {
 let c2 = {
     lastName: "Person",
     firstName: "Jane"
-}
+};
 
-describe('Add contact to repository', () => {
-    let contactId1;
-    let contactId2;
+let cust1 = {
+    name: "Big Company",
+    street: "1 Wall Street",
+    city: "New York",
+    state: "NY",
+    postalCode: "10004",
+    phone: "917 555 5555",
+    contactName: "Ezra Goldstein"
+};
 
-    it('should add two new contacts', async () => {
-        contactId1 = await getContactRepository().createAndSave(c1);
-        contactId2 = await getContactRepository().createAndSave(c2);
+let cust2 = {
+    name: "Small Company",
+    street: "123 Main St.",
+    city: "Tenaha",
+    state: "TX",
+    postalCode: "75974",
+    phone: "BR549",
+    contactName: "Billy Ray Jackson"
+};
 
-        let contact1 = await getContactRepository().findOneContact(contactId1);
-        let contact2 = await getContactRepository().findOneContact(contactId2);
-        assert.exists(contact1);
-        assert.exists(contact2);
+describe('Add customer to database', () => {
+    let customerId1;
+    let customerId2;
 
-        assert.isObject(contact1);
-        assert.isObject(contact2);
+    it('should add two new customers', async () => {
+        customerId1 = await getCustomerRepository().createAndSave(cust1);
+        customerId2 = await getCustomerRepository().createAndSave(cust2);
 
-        assert.isString(contact1.lastName);
-        assert.isString(contact2.lastName);
+        let customer1 = await getCustomerRepository().findOneCustomer(customerId1);
+        let customer2 = await getCustomerRepository().findOneCustomer(customerId2);
 
-        assert.equal(contact1.lastName, c1.lastName);
-        assert.equal(contact2.lastName, c2.lastName);
+        assert.exists(customer1);
+        assert.isObject(customer1);
+        assert.isString(customer1.name);
+        assert.equal(cust1.name, customer1.name);
+        assert.isString(customer1.street);
+        assert.equal(cust1.street, customer1.street);
+        assert.isString(customer1.city);
+        assert.equal(cust1.city, customer1.city);
+        assert.isString(customer1.state);
+        assert.equal(cust1.state, customer1.state);
+        assert.isString(customer1.postalCode);
+        assert.equal(cust1.postalCode, customer1.postalCode);
+        assert.isString(customer1.phone);
+        assert.equal(cust1.phone, customer1.phone);
+        assert.isString(customer1.contactName);
+        assert.equal(cust1.contactName, customer1.contactName);
 
-        assert.isString(contact1.firstName);
-        assert.isString(contact2.firstName);
-
-        assert.equal(contact1.firstName, c1.firstName);
-        assert.equal(contact2.firstName, c2.firstName);
+        assert.exists(customer2);
+        assert.isObject(customer2);
+        assert.isString(customer2.name);
+        assert.equal(cust2.name, customer2.name);
+        assert.isString(customer2.street);
+        assert.equal(cust2.street, customer2.street);
+        assert.isString(customer2.city);
+        assert.equal(cust2.city, customer2.city);
+        assert.isString(customer2.state);
+        assert.equal(cust2.state, customer2.state);
+        assert.isString(customer2.postalCode);
+        assert.equal(cust2.postalCode, customer2.postalCode);
+        assert.isString(customer2.phone);
+        assert.equal(cust2.phone, customer2.phone);
+        assert.isString(customer2.contactName);
+        assert.equal(cust2.contactName, customer2.contactName);
     });
 });
 
-describe('List all contacts in the database', () => {
+describe('List all customers in the database', () => {
     it('should find two contacts in the database', async () => {
-        let contacts = await getContactRepository().allcontacts();
-        assert.equal(contacts.length, 2);
+        let customers = await getCustomerRepository().allCustomers();
+        assert.equal(customers.length, 2);
     });
 });
 
-describe('Update contact in repository', () => {
-    it('should update a contact in the manager', async () => {
+describe('Update a contact in the database', () => {
+    it('should update a contact', async () => {
         let id = 1;
-        let newName = 'David';
+        let newName = 'Big Corporation';
 
-        let contact = await getContactRepository().findOneContact(id);
-        assert.exists(contact);
-        assert.isObject(contact);
+        let customer = await getCustomerRepository().findOneCustomer(id);
+        assert.exists(customer);
+        assert.isObject(customer);
 
         let updater = {
-            lastName: contact.lastName,
-            firstName: newName
+            name: newName,
+            street: customer.street,
+            city: customer.city,
+            state: customer.state,
+            postalCode: customer.postalCode,
+            phone: customer.phone,
+            contactName: customer.contactName
         };
 
-        let result = await getContactRepository().updateContact(id, updater);
+        let result = await getCustomerRepository().updateCustomer(id, updater);
         assert.equal(id, result);
 
-        let updated = await getContactRepository().findOneContact(id);
-        assert.equal(updated.firstName, newName);
+        let updated = await getCustomerRepository().findOneCustomer(id);
+        assert.equal(updated.name, newName);
     });
 });
 
-describe('Delete contact from repository', () => {
-    it('should remove a contact from the repository by ID', async () => {
+describe('Delete customer', () => {
+    it('should remove a customer by ID', async () => {
         let id = 1;
-        await getContactRepository().deleteContact(id);
+        await getCustomerRepository().deleteCustomer(id);
 
-        let contact = await getContactRepository().findOneContact(id);
-        assert.isNotObject(contact);
-    })
-    it('should remove a contact from the repository by object', async () => {
-        c2.id = 2
-        await getContactRepository().deleteContact(c2);
+        try {
+            await getCustomerRepository().findOneCustomer(id);
+        } catch (e) {
+            assert.equal(`No Customer was found for id: ${id}.`, e.message);
+        }
+    });
+    it('should remove a customer by object', async () => {
+        cust2.id = 2;
+        await getCustomerRepository().deleteCustomer(cust2);
 
-        let contact = await getContactRepository().findOneContact(c2.id);
-        assert.isNotObject(contact);
+        try {
+            await getCustomerRepository().findOneCustomer(cust2.id);
+        } catch (e) {
+            assert.equal(`No Customer was found for id: ${cust2.id}.`, e.message);
+        }
     });
 });

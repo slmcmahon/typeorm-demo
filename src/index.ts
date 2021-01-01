@@ -1,11 +1,12 @@
 import 'reflect-metadata';
-
-import { Contact } from './entity/Contact';
-export { Contact } from './entity/Contact';
-import { Address } from './entity/Address';
-export { Address } from './entity/Address';
-import { ContactRepository } from './ContactRepository';
-export { ContactRepository } from './ContactRepository';
+import { Customer } from './entity/Customer';
+export { Customer } from './entity/Customer';
+import { Invoice } from './entity/Invoice';
+export { Invoice } from './entity/Invoice';
+import { InvoiceItem } from './entity/InvoiceItem'
+export { InvoiceItem } from './entity/InvoiceItem'
+import { CustomerRepository } from './CustomerRepository';
+export { CustomerRepository } from './CustomerRepository';
 import { createConnection, Connection } from 'typeorm';
 
 let _connection: Connection;
@@ -29,7 +30,7 @@ export function connected() {
     return typeof _connection !== 'undefined';
 }
 
-export function getContactRepository(): ContactRepository {
-    let repo = _connection.getCustomRepository(ContactRepository);
+export function getCustomerRepository(): CustomerRepository {
+    let repo = _connection.getCustomRepository(CustomerRepository);
     return repo;
 }
