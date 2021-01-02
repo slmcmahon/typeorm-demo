@@ -7,10 +7,57 @@ const {
     getInvoiceItemRepository,
     Customer,
     Invoice,
-    InvoiceItem,
-    InvoiceRepository,
-    InvoiceItemRepository,
+    InvoiceItem
 } = require('../dist/index');
+
+const cust1 = {
+    name: "Big Company",
+    street: "1 Wall Street",
+    city: "New York",
+    state: "NY",
+    postalCode: "10004",
+    phone: "917 555 5555",
+    contactName: "John Q. Public"
+};
+
+const cust2 = {
+    name: "Small Company",
+    street: "123 Main St.",
+    city: "Tenaha",
+    state: "TX",
+    postalCode: "75974",
+    phone: "BR549",
+    contactName: "Billy Ray Jackson"
+};
+
+
+const inv1 = {
+    invoicedOn: new Date(2021, 1, 1),
+    customerInvNumber: 'DZ-015',
+    due: new Date(2021, 2, 1),
+    total: 100,
+    balance: 100
+};
+
+const inv2 = {
+    invoicedOn: new Date(2021, 1, 1),
+    customerInvNumber: '27B/6',
+    due: new Date(2021, 2, 1),
+    total: 100,
+    balance: 100
+};
+
+const invItem1 = {
+    quantity: 100,
+    price: 20,
+    description: 'widgets'
+};
+
+const invItem2 = {
+    quantity: 200,
+    price: 10,
+    description: 'framises'
+}
 
 describe('Initialize Contact Manager', () => {
     before(async () => {
@@ -37,55 +84,6 @@ describe('Initialize Contact Manager', () => {
     });
 });
 
-let cust1 = {
-    name: "Big Company",
-    street: "1 Wall Street",
-    city: "New York",
-    state: "NY",
-    postalCode: "10004",
-    phone: "917 555 5555",
-    contactName: "John Q. Public"
-};
-
-let cust2 = {
-    name: "Small Company",
-    street: "123 Main St.",
-    city: "Tenaha",
-    state: "TX",
-    postalCode: "75974",
-    phone: "BR549",
-    contactName: "Billy Ray Jackson"
-};
-
-
-let inv1 = {
-    invoicedOn: new Date(2021, 1, 1),
-    customerInvNumber: 'DZ-015',
-    due: new Date(2021, 2, 1),
-    total: 100,
-    balance: 100
-};
-
-let inv2 = {
-    invoicedOn: new Date(2021, 1, 1),
-    customerInvNumber: '27B/6',
-    due: new Date(2021, 2, 1),
-    total: 100,
-    balance: 100
-};
-
-let invItem1 = {
-    quantity: 100,
-    price: 20,
-    description: 'widgets'
-};
-
-let invItem2 = {
-    quantity: 200,
-    price: 10,
-    description: 'framises'
-}
-
 describe('Test entity relationships', () => {
     let customerId1;
     let customerId2;
@@ -93,7 +91,6 @@ describe('Test entity relationships', () => {
     let invoiceId1;
     let invoiceId2;
     let invoice1;
-    let invoice2;
 
     it('should create two new customer records', async () => {
         customerId1 = await getCustomerRepository().createAndSave(cust1);

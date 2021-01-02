@@ -39,4 +39,6 @@ Thumbs.db
 dist/**/*
 
 # ignore yarn.lock
-yarn.lock
+yarn.locksonar-project.properties
+.scannerwork/
+sonar-project.properties
