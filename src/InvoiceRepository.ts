@@ -71,13 +71,13 @@ export class InvoiceRepository extends Repository<Invoice> {
         }
 
         if (typeof updater.invoicedOn !== 'undefined') {
-            if (typeof updater.invoicedOn !== 'string') {
+            if (typeof updater.invoicedOn !== 'object') {
                 ret = false;
             }
         }
 
         if (typeof updater.due !== 'undefined') {
-            if (typeof updater.due !== 'string') {
+            if (typeof updater.due !== 'object') {
                 ret = false;
             }
         }

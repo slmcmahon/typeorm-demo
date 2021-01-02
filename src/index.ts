@@ -9,23 +9,14 @@ import { CustomerRepository } from './CustomerRepository';
 export { CustomerRepository } from './CustomerRepository';
 import { InvoiceRepository } from './InvoiceRepository';
 export { InvoiceRepository } from './InvoiceRepository';
+import { InvoiceItemRepository } from './InvoiceItemRepository';
+export { InvoiceItemRepository } from './InvoiceItemRepository';
 import { createConnection, Connection } from 'typeorm';
 
 let _connection: Connection;
 
 export async function connect(config: any) {
-    _connection = await createConnection({
-        type: config.type || "mssql",
-        database: config.database,
-        host: config.host || "localhost",
-        username: config.username,
-        password: config.password,
-        port: config.port || 1433,
-        logging: config.logging || false,
-        synchronize: config.synchronize || false,
-        dropSchema: config.dropSchema || false,
-        entities: config.entities
-    });
+    _connection = await createConnection(config);
 }
 
 export function connected() {
@@ -39,5 +30,10 @@ export function getCustomerRepository(): CustomerRepository {
 
 export function getInvoiceRepository(): InvoiceRepository {
     let repo = _connection.getCustomRepository(InvoiceRepository);
+    return repo;
+}
+
+export function getInvoiceItemRepository(): InvoiceItemRepository {
+    let repo = _connection.getCustomRepository(InvoiceItemRepository);
     return repo;
 }

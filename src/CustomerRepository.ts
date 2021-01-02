@@ -23,8 +23,16 @@ export class CustomerRepository extends Repository<Customer> {
         return customers;
     }
 
-    async findOneCustomer(id: number): Promise<Customer> {
-        let customer = await this.findOne({ where: { id: id } });
+    async findOneCustomer(id: number, includeInvoices?: boolean): Promise<Customer> {
+        let opts: any = {
+            where: {
+                id: id
+            }
+        };
+        if (includeInvoices) {
+            opts.relations = ["invoices"];
+        }
+        let customer = await this.findOne(opts);
         if (!CustomerRepository.isCustomer(customer)) {
             throw new Error(`No Customer was found for id: ${id}.`);
         }
